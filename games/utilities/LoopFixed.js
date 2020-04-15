@@ -1,4 +1,4 @@
-import { Timer } from "../utilities/Timer";
+import { Timer } from "./Timer";
 
 export class LoopFixed {
   constructor(update, render, updateHertz = 30) {
@@ -15,19 +15,19 @@ export class LoopFixed {
   }
   run() {
     if (!this.timer.tick()) {
-      setTimeout(this.runBound, this.updateDt - this.timer.getDt() - 1);
+      setTimeout(this.runBound, this.updateDt - this.timer.getDt());
       return;
     }
     this.render();
     this.update();
-    setTimeout(this.runBound, this.updateDt - this.timer.getDt() - 1);
+    setTimeout(this.runBound, this.updateDt - this.timer.getDt());
   }
   update() {
-    this.stats.updates += 1;
+    // this.stats.updates += 1;
     this.userUpdate(this.updateDtSeconds);
   }
   render() {
-    this.stats.renders += 1;
+    // this.stats.renders += 1;
     this.userRender(this.timer.getDt() / 1000);
   }
   stop() {

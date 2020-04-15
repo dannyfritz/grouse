@@ -8,9 +8,9 @@ export class Timer {
   tick() {
     const leftOver = this.tickFreq - this.getDt();
     if (leftOver > 0) {
-      return false
+      return false;
     }
-    this.previousTime = performance.now() + leftOver;
+    this.previousTime = performance.now() - leftOver;
     return true;
   }
   getDt() {

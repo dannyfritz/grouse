@@ -1,9 +1,10 @@
-import { Timer } from "../utilities/Timer";
+import { Timer } from "./Timer";
 
 export class LoopIndependent {
   constructor(update, render, updateHertz = 120) {
     this.userUpdate = update;
     this.userRender = render;
+    this.lastRender = performance.now();
     this.timer = new Timer(updateHertz);
     this.stats = {
       updates: 0,
@@ -17,14 +18,14 @@ export class LoopIndependent {
   }
   run() {
     if (!this.timer.tick()) {
-      setTimeout(this.runBound, this.updateDt - this.timer.getDt() - 1);
+      setTimeout(this.runBound, this.updateDt - this.timer.getDt());
       return;
     }
     this.update();
-    setTimeout(this.runBound, this.updateDt - this.timer.getDt() - 1);
+    setTimeout(this.runBound, this.updateDt - this.timer.getDt());
   }
   update() {
-    this.stats.updates += 1;
+    // this.stats.updates += 1;
     this.userUpdate(this.updateDtSeconds);
   }
   runRender() {
@@ -32,7 +33,7 @@ export class LoopIndependent {
   }
   render() {
     this.rafId = requestAnimationFrame(this.renderBound);
-    this.stats.renders += 1;
+    // this.stats.renders += 1;
     this.userRender(this.timer.getDt() / 1000);
   }
   stop() {

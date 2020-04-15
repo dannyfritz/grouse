@@ -10,7 +10,8 @@
   "dependencies": {
     "lodash": "^4.17.15",
     "matter-js": "^0.14.2",
-    "pixi.js": "^5.2.1"
+    "pixi.js": "^5.2.1",
+    "sat": "^0.8.0"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
