@@ -1,6 +1,6 @@
 const copyArrayBufferInto = (src, dest) => {
-  var srcF32 = new Float32Array(src);
-  var destF32 = new Float32Array(dest);
+  const srcF32 = new Float32Array(src);
+  const destF32 = new Float32Array(dest);
   destF32.set(srcF32);
 };
 
@@ -12,10 +12,12 @@ export class StateManager {
       this.states.push(new ArrayBuffer(size));
     }
     this.temp = new ArrayBuffer(size);
+    this.last = null;
     this.current = this.states[this.statesIndex];
     this.next = this.states[(this.statesIndex + 1) % this.states.length];
   }
   commit() {
+    this.last = this.current;
     this.current = this.next;
     this.statesIndex = (this.statesIndex + 1) % this.states.length;
     this.next = this.states[this.statesIndex];

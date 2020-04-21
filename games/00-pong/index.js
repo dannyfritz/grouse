@@ -1,17 +1,33 @@
-import { autoDetectRenderer, Container, Circle, Graphics, Rectangle } from "pixi.js";
+import { Application, Circle, Graphics, Rectangle } from "pixi.js";
 import SAT from "sat";
-import { LoopIndependent as Loop } from "../utilities/LoopIndependent";
+import { Howl, Howler } from 'howler';
 import { MemoryAllocator } from "../utilities/MemoryAllocator";
 import { StateManager } from "../utilities/StateManager";
 import { Keyboard } from "../utilities/Keyboard";
+import blipSoundAsset from "./blip.wav";
+import hitSoundAsset from "./hit.wav";
+
+const blipSound = new Howl({
+  src: [blipSoundAsset],
+  volume: 0.1,
+});
+const hitSound = new Howl({
+  src: [hitSoundAsset],
+  volume: 0.2,
+})
 
 const PADDLE_HEIGHT = 60;
 const PADDLE_WIDTH = 10;
 const PADDLE_SPEED = 300;
 const BALL_SIZE = 5;
-const BALL_SPEED = 400;
+const BALL_SPEED = 200;
 const ARENA_HEIGHT = 300;
 const ARENA_WIDTH = 500;
+
+const application = new Application({
+  width: ARENA_WIDTH,
+  height: ARENA_HEIGHT,
+});
 
 const memoryAllocator = new MemoryAllocator(STATE_SIZE);
 
@@ -58,17 +74,20 @@ const interpolate = (dt, currentState, nextState) => {
     if (ballPos[1] - BALL_SIZE < 0) {
       ballVel[1] *= -1;
       ballPos[1] += BALL_SIZE - ballPos[1];
+      blipSound.play();
     } else if (ballPos[1] + BALL_SIZE > ARENA_HEIGHT) {
       ballVel[1] *= -1;
       ballPos[1] -= (ballPos[1] + BALL_SIZE) - ARENA_HEIGHT;
+      blipSound.play();
     }
     if (ballPos[0] - BALL_SIZE < 0) {
       ballVel[0] *= -1;
       ballPos[0] += BALL_SIZE - ballPos[0];
-    }
-    if (ballPos[0] + BALL_SIZE > ARENA_WIDTH) {
+      hitSound.play();
+    } else if (ballPos[0] + BALL_SIZE > ARENA_WIDTH) {
       ballVel[0] *= -1;
       ballPos[0] -= (ballPos[0] + BALL_SIZE) - ARENA_WIDTH;
+      blipSound.play();
     }
   }
   const paddlePos = getPaddlePos(nextState);
@@ -90,6 +109,7 @@ const interpolate = (dt, currentState, nextState) => {
     ballVel[0] *= -1
     ballPos[0] -= response.overlapV.x * 2;
     ballPos[1] -= response.overlapV.y * 2;
+    blipSound.play();
   }
 };
 
@@ -116,44 +136,27 @@ const update = (dt) => {
   stateManager.commit();
 };
 
-const renderer = autoDetectRenderer({
-  width: ARENA_WIDTH,
-  height: ARENA_HEIGHT,
-  antialias: true,
-});
-const stage = new Container();
+document.body.appendChild(application.view);
 const circle = new Circle(0, 0, BALL_SIZE);
 const rectangle = new Rectangle(10, 0, PADDLE_WIDTH, PADDLE_HEIGHT);
 const graphics = new Graphics();
-document.body.appendChild(renderer.view);
-stage.addChild(graphics);
+application.stage.addChild(graphics);
 
 const render = (dt) => {
-  stateManager.prepareTemp();
-  interpolate(dt, stateManager.current, stateManager.temp);
-  const ballPos = getBallPos(stateManager.temp);
+  const ballPos = getBallPos(stateManager.last);
   circle.x = ballPos[0];
   circle.y = ballPos[1];
-  const paddlePos = getPaddlePos(stateManager.temp);
+  const paddlePos = getPaddlePos(stateManager.last);
   rectangle.y = paddlePos[0];
   graphics.clear();
   graphics.beginFill(0xFFFFFF);
   graphics.drawShape(circle);
   graphics.drawShape(rectangle);
   graphics.endFill();
-  renderer.clear();
-  renderer.render(stage);
 };
 
-const loop = new Loop(update, render, 120);
-
-setTimeout(() => {
-  loop.run();
-  loop.runRender();
-  // setTimeout(() => {
-  //   loop.stop()
-  //   console.log((loop.timer.getElapsed() / 1000).toFixed(2), "seconds");
-  //   console.log(loop.stats);
-  // }, 3000);
-}, 0);
-
+application.ticker.add((dt) => {
+  const dtSeconds = application.ticker.elapsedMS / 1000;
+  update(dtSeconds);
+  render(dtSeconds);
+});
