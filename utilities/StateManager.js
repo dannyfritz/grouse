@@ -8,22 +8,20 @@ export class StateManager {
   constructor(size, count) {
     this.statesIndex = 0;
     this.states = [];
-    for (let i = 0; i < count; i++) {
-      this.states.push(new ArrayBuffer(size));
+    for (let i = 0; i < count; i += 1) {
+      this.states.push(new SharedArrayBuffer(size));
     }
-    this.temp = new ArrayBuffer(size);
-    this.last = null;
+    this.render = new SharedArrayBuffer(size);
     this.current = this.states[this.statesIndex];
-    this.next = this.states[(this.statesIndex + 1) % this.states.length];
+    this.next = this.states[this.statesIndex + 1];
   }
   commit() {
-    this.last = this.current;
     this.current = this.next;
     this.statesIndex = (this.statesIndex + 1) % this.states.length;
     this.next = this.states[this.statesIndex];
     copyArrayBufferInto(this.current, this.next);
   }
-  prepareTemp() {
-    copyArrayBufferInto(this.current, this.temp);
+  prepareRender() {
+    copyArrayBufferInto(this.current, this.render);
   }
 }

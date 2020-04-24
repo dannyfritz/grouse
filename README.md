@@ -7,7 +7,7 @@ This guide is _not_ about game design, marketing, publishing, project setup, etc
 ## Roadmap
 
 - Game Examples
-  - [ ] Pong
+  - [x] Pong
   - [ ] Breakout
   - [ ] Flappy Bird
   - [ ] Bejeweled
