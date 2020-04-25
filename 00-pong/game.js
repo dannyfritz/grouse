@@ -1,7 +1,6 @@
 import { StateManager } from "../utilities/StateManager";
 import {
   STATE_SIZE, STATE_NUM,
-  INPUT_EVENT, RENDER_EVENT,
   getInput,
   getAudioQueue, SOUND_CLEAR,
 } from "./constants";
@@ -36,25 +35,13 @@ setInterval(loop, 0);
 postMessage(stateManager.render);
 
 onmessage = (event) => {
-  switch (event?.data?.type) {
-    case RENDER_EVENT:
-    {
-      stateManager.prepareRender();
-      const now = performance.now();
-      interpolate((now - lastTick) / 1000, stateManager.current, stateManager.render);
-      const audioQueue = getAudioQueue(stateManager.next);
-      for (let i = 0; i < audioQueue.length; i += 1) {
-        audioQueue[i] = SOUND_CLEAR;
-      }
-      break;
-    }
-    case INPUT_EVENT:
-    {
-      const { input } = event.data;
-      getInput(stateManager.next)[0] = input;
-      break;
-    }
-    default:
-      throw new Error(`Unrecognized event: ${event.data.type}`);
+  const now = performance.now();
+  const { input } = event.data;
+  getInput(stateManager.next)[0] = input;
+  stateManager.prepareRender();
+  const audioQueue = getAudioQueue(stateManager.next);
+  for (let i = 0; i < audioQueue.length; i += 1) {
+    audioQueue[i] = SOUND_CLEAR;
   }
+  interpolate((now - lastTick) / 1000, stateManager.current, stateManager.render);
 };

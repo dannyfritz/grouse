@@ -1,10 +1,5 @@
 import { MemoryAllocator } from "../utilities/MemoryAllocator";
 
-export const AUDIO_QUEUE_SIZE = 2;
-export const SOUND_CLEAR = 0;
-export const SOUND_BLIP = 1;
-export const SOUND_HIT = 2;
-
 export const ARENA_HEIGHT = 300;
 export const ARENA_WIDTH = 500;
 export const BALL_SIZE = 5;
@@ -18,8 +13,10 @@ export const UP_MASK   = 0b0000_0001;
 export const DOWN_MASK = 0b0000_0010;
 /* eslint-enable no-multi-spaces */
 
-export const RENDER_EVENT = 0;
-export const INPUT_EVENT = 1;
+export const AUDIO_QUEUE_SIZE = 2;
+export const SOUND_CLEAR = 0;
+export const SOUND_BLIP = 1;
+export const SOUND_HIT = 2;
 
 export const memoryAllocator = new MemoryAllocator(Number.POSITIVE_INFINITY);
 
