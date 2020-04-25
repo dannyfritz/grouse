@@ -1,67 +1,37 @@
-# Grouse JavaScript Game Development Guide
+# Grouse Low-Level JavaScript Game Examples
 
-Grouse is a collection of guides for game developers targeting the web. Each section will include snippets, libraries, and/or Platform API's to achieve a technical goal.
+Grouse is a collection of sample games and utilities to demonstrate low-level game development with only JavaScript. Many of the patterns used are less ergonomic for developers, but offer incredible time and memory benefits. The code and mental model required is closer to C than traditional JavaScript to write this way. Just the fact this type of code is possible on the web without WebAssembly is a testament to how far the web has come.
 
-This guide is _not_ about game design, marketing, publishing, project setup, etc..
+## Game Roadmap
 
-## Roadmap
+- [x] Pong
+- [ ] Breakout
+- [ ] Flappy Bird
+- [ ] Bejeweled
+- [ ] NES Super Mario Bros.
+- [ ] NES The Legend of Zelda
+- [ ] Angry Birds
+- [ ] Peggle
+- [ ] DOS Jump n Bump
+- [ ] Atari Joust
+- [ ] SNES Mario Kart
+- [ ] SNES Kirby Dream Course
+- [ ] NES Hockey
+- [ ] GB Pokemon Red/Blue
 
-- Game Examples
-  - [x] Pong
-  - [ ] Breakout
-  - [ ] Flappy Bird
-  - [ ] Bejeweled
-  - [ ] NES Super Mario Bros.
-  - [ ] NES The Legend of Zelda
-  - [ ] Angry Birds
-  - [ ] Peggle
-  - [ ] DOS Jump n Bump
-  - [ ] Atari Joust
-  - [ ] SNES Mario Kart
-  - [ ] SNES Kirby Dream Course
-  - [ ] NES Hockey
-  - [ ] GB Pokemon Red/Blue
-- Snippets and Libraries
-  - Runtime
-    - [ ] Fixed
-    - [ ] Variable
-  - Graphics
-    - [ ] Shapes (pixi.js)
-    - [ ] Text (pixi.js)
-    - [ ] Image (pixi.js)
-    - [ ] Particle System (pixi.js)
-    - [ ] GLSL Shader (pixi.js)
-    - [ ] Video (pixi.js)
-  - Controller
-    - [ ] Keyboard 
-    - [ ] Mouse
-    - [ ] Gamepad
-    - [ ] Touch
-    - [ ] MIDI
-    - [ ] Vibration
-  - Audio
-    - [ ] Sound Playback (howler.js)
-    - [ ] Audio Generation (WebAudio)
-    - [ ] Sound Analyzing (AnalyserNode)
-  - Physics
-    - [ ] Math (glMatrix.js)
-    - [ ] Collision Destection (sat.js)
-    - [ ] 2d Rigid Body Physics (matter.js)
-  - Storage
-    - [ ] Key-Value DB (LocalStorage / SessionStorage)
-    - [ ] Persistent NoSQL Object DB (IndexedDB)
-  - Entity Management
-    - [ ] Array of Structs
-    - [ ] Entity Component System (ECS)
-  - Sensor
-    - [ ] Microphone
-    - [ ] DeviceMotion
-    - [ ] Geolocation
-    - [ ] Camera
-  - Network
-    - [ ] HTTP (Fetch)
-    - [ ] Websocket
-    - [ ] UDP (WebRTC)
-  - Parellelism
-    - [ ] Threading (WebWorker)
-    - [ ] Shared Objects (SharedArrayBuffer / Atomics)
+## Features
+
+* A [linear memory model](https://en.wikipedia.org/wiki/Region-based_memory_management) with access to arrays of Int, UInt, BigInt, and Float
+* A [Ring Buffer](https://en.wikipedia.org/wiki/Circular_buffer) for storing your game states
+* Small memory footprint with very performant copying of entire gamestates
+* Variable render and fixed update [gameloop](https://www.gafferongames.com/post/fix_your_timestep/)
+* Game logic computed [in parallel](https://dassur.ma/things/when-workers/)
+
+## Platform Features Required
+
+* [SharedArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer)
+* [Atomics](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Atomics)
+* [TypedArrays](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays#Buffers_and_views_typed_array_architecture)
+* [Worker](https://developer.mozilla.org/en-US/docs/Web/API/Worker)
+* [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame)
+* [performance.now](https://developer.mozilla.org/en-US/docs/Web/API/Performance/now)
