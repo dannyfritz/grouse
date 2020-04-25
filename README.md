@@ -27,6 +27,12 @@ Grouse is a collection of sample games and utilities to demonstrate low-level ga
 * Variable render and fixed update [gameloop](https://www.gafferongames.com/post/fix_your_timestep/)
 * Game logic computed [in parallel](https://dassur.ma/things/when-workers/)
 
+## Development
+
+`yarn` or `npm install`
+`yarn start:pong` or `npm run start:pong`
+Point your browser to [http://localhost:1234/](http://localhost:1234/)
+
 ## Platform Features Required
 
 * [SharedArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer)
