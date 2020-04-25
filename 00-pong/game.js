@@ -1,5 +1,10 @@
 import { StateManager } from "../utilities/StateManager";
-import { STATE_SIZE, STATE_NUM, INPUT_EVENT, RENDER_EVENT, getInput, getAudioQueue, SOUND_CLEAR } from "./constants";
+import {
+  STATE_SIZE, STATE_NUM,
+  INPUT_EVENT, RENDER_EVENT,
+  getInput,
+  getAudioQueue, SOUND_CLEAR,
+} from "./constants";
 import { initializeState, interpolate } from "./interpolate";
 
 export const stateManager = new StateManager(STATE_SIZE, STATE_NUM);
@@ -39,7 +44,7 @@ onmessage = (event) => {
       interpolate((now - lastTick) / 1000, stateManager.current, stateManager.render);
       const audioQueue = getAudioQueue(stateManager.next);
       for (let i = 0; i < audioQueue.length; i += 1) {
-        Atomics.store(audioQueue, i, SOUND_CLEAR);
+        audioQueue[i] = SOUND_CLEAR;
       }
       break;
     }

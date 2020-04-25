@@ -1,7 +1,7 @@
 const copyArrayBufferInto = (src, dest) => {
-  const srcF32 = new Float32Array(src);
-  const destF32 = new Float32Array(dest);
-  destF32.set(srcF32);
+  const srcF64 = new Float64Array(src);
+  const destF64 = new Float64Array(dest);
+  destF64.set(srcF64);
 };
 
 export class StateManager {

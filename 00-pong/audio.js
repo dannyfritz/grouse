@@ -19,7 +19,7 @@ const hitSound = new Howl({
 export const audio = (state) => {
   const queue = getAudioQueue(state);
   for (let i = 0; i < queue.length; i += 1) {
-    const soundId = Atomics.load(queue, i);
+    const soundId = queue[i];
     switch (soundId) {
       case SOUND_BLIP:
         blipSound.play();
