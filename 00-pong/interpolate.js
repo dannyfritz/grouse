@@ -3,10 +3,11 @@ import {
   getBallPos, getBallVel,
   getPaddlePos,
   getInput,
+  getAudioIndex, getAudioQueue, SOUND_BLIP, SOUND_HIT,
   UP_MASK, DOWN_MASK,
   ARENA_WIDTH, ARENA_HEIGHT,
   BALL_SIZE, BALL_SPEED,
-  PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED,
+  PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, AUDIO_QUEUE_SIZE,
 } from "./constants";
 
 export const initializeState = (state) => {
@@ -28,7 +29,8 @@ const ballShape = new SAT.Circle(new SAT.Vector(0, 0), BALL_SIZE);
 const paddle1Shape = new SAT.Box(new SAT.Vector(10, 0), PADDLE_WIDTH, PADDLE_HEIGHT);
 
 export const interpolate = (dt, currentState, nextState) => {
-  // TODO: Atomics on nextState and currentState
+  const audioIndex = getAudioIndex(nextState);
+  const audioQueue = getAudioQueue(nextState);
   const ballPos = getBallPos(nextState);
   const ballVel = getBallVel(nextState);
   {
@@ -37,20 +39,24 @@ export const interpolate = (dt, currentState, nextState) => {
     if (ballPos[1] - BALL_SIZE < 0) {
       ballVel[1] *= -1;
       ballPos[1] += BALL_SIZE - ballPos[1];
-      // blipSound.play();
+      Atomics.store(audioQueue, audioIndex[0], SOUND_BLIP);
+      Atomics.store(audioIndex, 0, (audioIndex[0] + 1) % AUDIO_QUEUE_SIZE);
     } else if (ballPos[1] + BALL_SIZE > ARENA_HEIGHT) {
       ballVel[1] *= -1;
       ballPos[1] -= (ballPos[1] + BALL_SIZE) - ARENA_HEIGHT;
-      // blipSound.play();
+      Atomics.store(audioQueue, audioIndex[0], SOUND_BLIP);
+      Atomics.store(audioIndex, 0, (audioIndex[0] + 1) % AUDIO_QUEUE_SIZE);
     }
     if (ballPos[0] - BALL_SIZE < 0) {
       ballVel[0] *= -1;
       ballPos[0] += BALL_SIZE - ballPos[0];
-      // hitSound.play();
+      Atomics.store(audioQueue, audioIndex[0], SOUND_HIT);
+      Atomics.store(audioIndex, 0, (audioIndex[0] + 1) % AUDIO_QUEUE_SIZE);
     } else if (ballPos[0] + BALL_SIZE > ARENA_WIDTH) {
       ballVel[0] *= -1;
       ballPos[0] -= (ballPos[0] + BALL_SIZE) - ARENA_WIDTH;
-      // blipSound.play();
+      Atomics.store(audioQueue, audioIndex[0], SOUND_BLIP);
+      Atomics.store(audioIndex, 0, (audioIndex[0] + 1) % AUDIO_QUEUE_SIZE);
     }
   }
   const paddlePos = getPaddlePos(nextState);
@@ -71,6 +77,7 @@ export const interpolate = (dt, currentState, nextState) => {
     ballVel[0] *= -1;
     ballPos[0] -= response.overlapV.x * 2;
     ballPos[1] -= response.overlapV.y * 2;
-    // blipSound.play();
+    Atomics.store(audioQueue, audioIndex[0], SOUND_BLIP);
+    Atomics.store(audioIndex, 0, (audioIndex[0] + 1) % AUDIO_QUEUE_SIZE);
   }
 };

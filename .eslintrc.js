@@ -3,6 +3,7 @@ module.exports = {
   extends: "airbnb-base",
   globals: {
     SharedArrayBuffer: true,
+    Atomics: true,
   },
   env: {
     browser: true,
