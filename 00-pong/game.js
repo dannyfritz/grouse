@@ -8,6 +8,7 @@ import {
 import { initializeState, interpolate } from "./interpolate";
 
 export const stateManager = new StateManager(STATE_SIZE, STATE_NUM);
+// eslint-disable-next-line no-console
 console.log(`${STATE_NUM + 1} x ${STATE_SIZE} = ${(STATE_NUM + 1) * STATE_SIZE} bytes used to store Pong's data`);
 
 initializeState(stateManager.next);
@@ -39,7 +40,6 @@ const lock = getLock(stateManager.render);
 onmessage = (event) => {
   const { input } = event.data;
   getInput(stateManager.next)[0] = input;
-  Atomics.wait(lock, 0, 0);
   const now = performance.now();
   stateManager.prepareRender();
   const audioQueue = getAudioQueue(stateManager.next);

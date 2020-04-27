@@ -4,6 +4,7 @@ import { audio } from "./audio";
 import { getLock } from "./constants";
 import "../utilities/asyncWait.polyfill";
 
+
 const game = new Worker("./game.js");
 
 game.onmessage = (e) => {
@@ -11,11 +12,10 @@ game.onmessage = (e) => {
   const lock = getLock(state);
   const renderLoop = async () => {
     const input = getKeyboardInput();
+    Atomics.store(lock, 0, 1);
     game.postMessage({
       input,
     });
-    Atomics.store(lock, 0, 1);
-    Atomics.notify(lock, 0);
     await Atomics.waitAsync(lock, 0, 1);
     render(state);
     audio(state);
