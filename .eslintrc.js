@@ -1,5 +1,6 @@
 module.exports = {
   parser: "babel-eslint",
+  ignorePatterns: [ "utilities/asyncWait.polyfill.js" ],
   extends: "airbnb-base",
   globals: {
     SharedArrayBuffer: true,
@@ -14,5 +15,5 @@ module.exports = {
     "quotes": ["error", "double"],
     "no-lone-blocks": ["off"],
     "no-bitwise": ["off"],
-  }
+  },
 }
