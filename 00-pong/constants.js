@@ -25,6 +25,8 @@ export const memoryAllocator = new MemoryAllocator(Number.POSITIVE_INFINITY);
 
 const lockOffset = memoryAllocator.allocate(Int32Array.BYTES_PER_ELEMENT * 1);
 export const getLock = _memo((state) => new Int32Array(state, lockOffset, 1));
+const scoresOffset = memoryAllocator.allocate(Uint16Array.BYTES_PER_ELEMENT * 2);
+export const getScores = _memo((state) => new Uint16Array(state, scoresOffset, 2));
 const ballPosOffset = memoryAllocator.allocate(Float32Array.BYTES_PER_ELEMENT * 2);
 export const getBallPos = _memo((state) => new Float32Array(state, ballPosOffset, 2));
 const ballVelOffset = memoryAllocator.allocate(Float32Array.BYTES_PER_ELEMENT * 2);

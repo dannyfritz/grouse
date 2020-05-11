@@ -1,9 +1,8 @@
+import "../utilities/asyncWait.polyfill";
 import { render } from "./render";
 import { getKeyboardInput } from "./controls";
 import { audio } from "./audio";
 import { getLock } from "./constants";
-import "../utilities/asyncWait.polyfill";
-
 
 const game = new Worker("./game.js");
 

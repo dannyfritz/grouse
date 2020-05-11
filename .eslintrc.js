@@ -15,5 +15,6 @@ module.exports = {
     "quotes": ["error", "double"],
     "no-lone-blocks": ["off"],
     "no-bitwise": ["off"],
+    "max-len": ["warning", 120],
   },
 }
